@@ -1,26 +1,87 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import Cookies from 'js-cookie';
 
-export default function FeedCard({post}) {
+export default function FeedCard({ post, myId }) {
+    const [user, setUser] = useState({});
+    useEffect(() => {
+        async function load() {
+            const response = await fetch(`https://lamb-backend.herokuapp.com/backend/get-user/${post.userFK}`);
+            const data = await response.json();
+            setUser(data);
+        }
+        load();
+    }, [post])
+    const handleDelete = async () => {
+
+        const yes = confirm('Are You 100% sure to Delete it?')
+        if (yes) {
+            const res = await fetch(`https://lamb-backend.herokuapp.com/backend/delete-post/${post.postId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            const data = await res.json();
+            console.log(data)
+        }
+
+    }
+    const handleSolveUpdate = async () => {
+        const newPost = post;
+        console.log(post, newPost)
+        newPost.lastStatus = post.lastStatus === "SOLVED" ? "UNSOLVED" : "SOLVED";
+        const yes = confirm('Are You sure?')
+        if (yes) {
+            const res = await fetch(`https://lamb-backend.herokuapp.com/backend/update-post`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newPost)
+            })
+            const data = await res.json();
+            console.log(data)
+        }
+
+    }
+
     return (
-        <div className="w-full max-w-sm px-4 py-3 mx-auto my-4 bg-white rounded-md shadow-md">
-            <div className="flex items-center justify-between">
-                <span className="text-2xl font-bold text-red-600">B(+ve) Blood</span>
-                <span className="px-3 py-1 text-sm text-blue-800 uppercase bg-blue-200 rounded-full">{post.phone}hkhk</span>
+        <div className="p-12 md:w-1/2 flex flex-col items-start">
+            <a className="inline-flex items-center">
+                <img alt="blog" src="https://dummyimage.com/103x103" className="w-12 h-12 rounded-full flex-shrink-0 object-cover object-center" />
+                <span className="flex-grow flex flex-col pl-4">
+                    <span className="title-font font-medium text-gray-900">{user?.username}</span>
+                    <span className="text-gray-400 text-xs tracking-widest mt-0.5 border p-1">{post.lastStatus}</span>
+                </span>
+            </a>
+            <p className="leading-relaxed mb-8  border-t-2 mt-2 border-gray-100">
+                {post.postDetails}
+            </p>
+            <div className="flex items-center flex-wrap pb-4 mb-4 mt-auto w-full">
+                {/* <p className="text-indigo-500 inline-flex items-center">
+                    Required Blood Group:<span className='text-red-700 ml-2 font-bold'> B(+ve)</span>
+
+                </p> */}
+                <span className="text-gray-400 mr-3 inline-flex items-center ml-auto leading-none text-sm pr-3 py-1 border-r-2 border-gray-200">
+                    Poseted: 10 Sep 2022
+                </span>
+                {post.userFK === parseInt(myId) ?
+                    <div className='flex items-center'>
+                        <label htmlFor="default-toggle" class="inline-flex relative items-center cursor-pointer mr-4">
+                            <input onChange={handleSolveUpdate} type="checkbox" checked={post.lastStatus === "SOLVED" && true} id="default-toggle" class="sr-only peer" />
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            <span class="ml-1 text-sm font-medium text-gray-900">{post.lastStatus}</span>
+                        </label>
+                        <button onClick={handleDelete} className='bg-red-800 text-white py-1 rounded-md px-2'>Delete</button>
+                    </div>
+                    :
+                    <a href={`tel:+88${user?.phone}`} className="text-white bg-green-700 rounded-lg hover:bg-green-800 px-3 py-2 inline-flex items-center leading-none text-md">
+                        Connect Now
+                    </a>}
             </div>
 
-            <div>
-                <h1 className="mt-2 text-lg font-semibold text-gray-800">{post.username}</h1>
-                <h1 className="mt-2 text-md font-semibold text-gray-800">Square Hospital</h1>
-                <p className="mt-2 text-sm text-gray-600">18 Bir Uttam Qazi Nuruzzaman Sarak West, Panthapath, Dhaka 1205</p>
-            </div>
-
-            <div>
-                <div className="flex items-center mt-2 text-black">
-                    <span className='text-md'>Mobile Number: 01983510532</span>
-                </div>
 
 
-            </div>
         </div>
     )
 }

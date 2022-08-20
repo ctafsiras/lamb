@@ -4,8 +4,9 @@ import { FaBeer, FaPhone } from 'react-icons/fa';
 import { BiDonateBlood } from 'react-icons/bi';
 import { HiOutlineMail, HiLockClosed, HiUser, HiLocationMarker, HiCalendar } from 'react-icons/hi';
 import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
-export default function register({ setUser }) {
+export default function register() {
     const router = useRouter();
 
     const [username, setUsername] = useState('');
@@ -13,7 +14,7 @@ export default function register({ setUser }) {
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [area, setArea] = useState('');
-    const [role, setRole] = useState('user');
+    const [role, setRole] = useState('visitor');
     const [dob, setDob] = useState('');
 
     const [eligibility, setEligibility] = useState('');
@@ -24,7 +25,7 @@ export default function register({ setUser }) {
         e.preventDefault();
         const user = { username, email, password, phone, area, dob, role, eligibility, last_donate, blood_type }
         setLoading(true);
-        const res = await fetch('https://lamb-backend.herokuapp.com/user/register', {
+        const res = await fetch('https://lamb-backend.herokuapp.com//backend/save-user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -32,10 +33,10 @@ export default function register({ setUser }) {
             body: JSON.stringify(user),
         })
         const data = await res.json();
-
-        if (data.username.length > 0) {
+        console.log(data)
+        if (data > 0) {
             setLoading(false);
-            setUser(data)
+            Cookies.set('myId', data, { expires: 365 })
             router.push('/')
         }
     }
@@ -85,12 +86,12 @@ export default function register({ setUser }) {
                         </div>
 
                         <div className="mt-4 flex items-center text-gray-500">
-                            <input onChange={(e) => setRole(e.target.checked ? "donor" : 'user')} type="checkbox" id="role" className="mr-2" />
-                            <p className="text-sm" htmlFor="role">
+                            <input onChange={(e) => setRole(e.target.checked ? "donor" : 'visitor')} type="checkbox" id="role" className="mr-2" />
+                            <p className="text-sm" htmlhtmlFor="role">
                                 As a Donor?
                             </p>
                         </div>
-                        <div className={role === 'user' && 'hidden'}>
+                        <div className={role === 'visitor' && 'hidden'}>
                             <div className="relative mt-3">
                                 <input onChange={(e) => setEligibility(e.target.value)} className="appearance-none border pl-12 border-gray-100 shadow-sm focus:shadow-md focus:placeholder-gray-600  transition  rounded-md w-full py-3 text-gray-600 leading-tight focus:outline-none focus:ring-gray-600 focus:shadow-outline" id="eligibility" type="text" placeholder="Yes or No" />
                                 <div className="absolute left-4 inset-y-0 flex items-center">
@@ -111,9 +112,9 @@ export default function register({ setUser }) {
                             </div>
                         </div>
                         {
-                            loading && <div class="flex justify-center items-center">
-                                <div class="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">
-                                    <span class="visually-hidden">...</span>
+                            loading && <div className="flex justify-center items-center">
+                                <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">
+                                    <span className="visually-hidden"></span>
                                 </div>
                             </div>
                         }
