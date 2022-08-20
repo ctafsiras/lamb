@@ -13,7 +13,7 @@ export default function Navbar() {
                         <a className="text-2xl font-bold text-gray-800 transition-colors duration-200 transform  lg:text-3xl hover:text-gray-700" href="#">Lamb</a>
                     </div>
 
-                    {/* <!-- Mobile menu button --> */}
+                    {/* <!-- Mobile menu button here --> */}
                     <div className="flex md:hidden">
                         <button type="button" className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600 " aria-label="toggle menu">
                             <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
