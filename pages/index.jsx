@@ -13,7 +13,6 @@ const Home = ({ allPosts }) => {
   const router = useRouter()
   let myId = Cookies.get('myId')
 
-  console.log(allPost)
   const [me, setMe] = useState({});
   useEffect(() => {
 
@@ -31,7 +30,6 @@ const Home = ({ allPosts }) => {
   }, [myId])
   const handleCreate = async () => {
     const newPost = { postDetails: post, lastStatus: "UNSOLVED", userFK: myId }
-    console.log(newPost)
     const res = await fetch('https://lamb-backend.herokuapp.com/backend/create-post', {
       method: 'POST',
       headers: {
@@ -40,7 +38,6 @@ const Home = ({ allPosts }) => {
       body: JSON.stringify(newPost),
     })
     const data = await res.json();
-    console.log(data)
     toast.success('Successfully Created, Please Refresh')
     setPost('')
     setModal(false);

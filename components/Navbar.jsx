@@ -4,7 +4,6 @@ import { useRouter } from 'next/router'
 
 export default function Navbar() {
     const router = useRouter()
-    console.log(router);
     return (
 
         <nav className={`bg-white shadow ${(router.pathname === '/register' || '/login') && 'hidden'}`}>

@@ -33,7 +33,6 @@ export default function register() {
             body: JSON.stringify(user),
         })
         const data = await res.json();
-        console.log(data)
         if (data > 0) {
             setLoading(false);
             Cookies.set('myId', data, { expires: 365 })
@@ -48,9 +47,9 @@ export default function register() {
                         Register Account
                     </p>
                     <form onSubmit={handleSubmit} className="mt-6">
-                    <span className='ml-2 mb-1 text-xs'>Enter Your Email:</span>
+                        <span className='ml-2 mb-1 text-xs'>Enter Your Email:</span>
                         <div className="relative">
-                            
+
                             <input onChange={(e) => setUsername(e.target.value)} className="appearance-none border pl-12 border-gray-100 shadow-sm focus:shadow-md focus:placeholder-gray-600  transition  rounded-md w-full py-3 text-gray-600 leading-tight focus:outline-none focus:ring-gray-600 focus:shadow-outline" id="username" type="text" placeholder="Name" />
                             <div className="absolute left-4 inset-y-0 flex items-center">
                                 <HiUser />
@@ -99,7 +98,7 @@ export default function register() {
                             </p>
                         </div>
                         <div className={role === 'visitor' && 'hidden'}>
-                        <span className='ml-2 mt-3 text-xs'>Enter Your Eligibility:</span>
+                            <span className='ml-2 mt-3 text-xs'>Enter Your Eligibility:</span>
                             <div className="relative mt-1">
                                 <input onChange={(e) => setEligibility(e.target.value)} className="appearance-none border pl-12 border-gray-100 shadow-sm focus:shadow-md focus:placeholder-gray-600  transition  rounded-md w-full py-3 text-gray-600 leading-tight focus:outline-none focus:ring-gray-600 focus:shadow-outline" id="eligibility" type="text" placeholder="Yes or No" />
                                 <div className="absolute left-4 inset-y-0 flex items-center">
@@ -115,7 +114,7 @@ export default function register() {
                             </div>
                             <span className='ml-2 mt-3 text-xs'>Enter Your Blood Type:</span>
                             <div className="relative mt-1">
-                                
+
                                 <input onChange={(e) => setBloodType(e.target.value)} className="appearance-none border pl-12 border-gray-100 shadow-sm focus:shadow-md focus:placeholder-gray-600  transition  rounded-md w-full py-3 text-gray-600 leading-tight focus:outline-none focus:ring-gray-600 focus:shadow-outline" id="blood_type" type="text" placeholder="Blood Type" />
                                 <div className="absolute left-4 inset-y-0 flex items-center">
                                     <BiDonateBlood />

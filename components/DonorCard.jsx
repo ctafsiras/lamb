@@ -38,11 +38,8 @@ export default function DonorCard({ donor }) {
         })
         const data = await res.json();
         setReqSent(true)
-        console.log(data)
         toast.success('Successfully Requested!')
     }
-    console.log(`https://lamb-backend.herokuapp.com/backend/get-donor-history/${donor.donorId}`);
-    console.log(donorBloodHistory.length)
     return (
         <div class="w-80 bg-white shadow rounded border border-transparent hover:border-blue-500 mx-auto">
             <div class="h-48 w-full checker-bg flex items-center justify-center p-4 text-blue-500">

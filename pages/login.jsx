@@ -27,7 +27,6 @@ export default function Login() {
             body: JSON.stringify(user),
         })
         const data = await res.json();
-        console.log(data)
         if (data > 0) {
             setLoading(false);
             Cookies.set('myId', data, { expires: 365 })

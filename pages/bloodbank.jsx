@@ -18,8 +18,7 @@ export default function bloodbank({ donors }) {
         </div>
     )
 }
-export async function getServerSideProps({ req }) {
-    console.log(req);
+export async function getServerSideProps() {
     const response = await fetch("https://lamb-backend.herokuapp.com/backend/get-all-donor");
     const data = await response.json();
     return {

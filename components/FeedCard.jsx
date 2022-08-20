@@ -22,13 +22,11 @@ export default function FeedCard({ post, myId }) {
                 },
             })
             const data = await res.json();
-            console.log(data)
         }
 
     }
     const handleSolveUpdate = async () => {
         const newPost = post;
-        console.log(post, newPost)
         newPost.lastStatus = post.lastStatus === "SOLVED" ? "UNSOLVED" : "SOLVED";
         const yes = confirm('Are You sure?')
         if (yes) {
@@ -40,7 +38,6 @@ export default function FeedCard({ post, myId }) {
                 body: JSON.stringify(newPost)
             })
             const data = await res.json();
-            console.log(data)
         }
 
     }
