@@ -36,8 +36,7 @@ export default function Navbar() {
 
                         <Link href="profile">
                             <a className="my-1 text-sm font-medium text-gray-700 transition-colors duration-200 transform hover:text-blue-500 md:mx-4 md:my-0">Profile</a></Link>
-                        <Link href="/register">
-                            <a className="my-1 text-sm font-medium text-gray-700 transition-colors duration-200 transform hover:text-blue-500 md:mx-4 md:my-0">Register</a></Link>
+                       
                     </div>
                 </div>
             </div>
