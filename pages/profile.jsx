@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
 import Cookies from 'js-cookie';
+import { useRouter } from "next/router";
 export default function profile() {
     const [me, setMe] = useState({});
     const myId = Cookies.get('myId');
+    const router=useRouter();
     useEffect(() => {
         async function load() {
-            const response = await fetch(`https://lamb-backend.herokuapp.com/backend/get-user/${myId}`);
-            const data = await response.json();
-            setMe(data);
+            if (!myId) {
+                router.push('/register');
+            }
+            else {
+                const response = await fetch(`https://lamb-backend.herokuapp.com/backend/get-user/${myId}`);
+                const data = await response.json();
+                setMe(data);
+            }
         }
         load();
     }, [myId])

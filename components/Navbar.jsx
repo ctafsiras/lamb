@@ -1,10 +1,13 @@
 import React from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 export default function Navbar() {
+    const router = useRouter()
+    console.log(router);
     return (
 
-        <nav className="bg-white shadow">
+        <nav className={`bg-white shadow ${(router.pathname === '/register' || '/login') && 'hidden'}`}>
             <div className="container px-6 py-4 mx-auto md:flex md:justify-between md:items-center">
                 <div className="flex items-center justify-between">
                     <div>
@@ -28,9 +31,9 @@ export default function Navbar() {
                             <a className="my-1 text-sm font-medium text-gray-700 transition-colors duration-200 transform hover:text-blue-500 md:mx-4 md:my-0">Feed</a></Link>
                         <Link href="/bloodbank">
                             <a className="my-1 text-sm font-medium text-gray-700 transition-colors duration-200 transform hover:text-blue-500 md:mx-4 md:my-0">Blood Bank</a></Link>
-                            <Link href="/bloodrequest">
+                        <Link href="/bloodrequest">
                             <a className="my-1 text-sm font-medium text-gray-700 transition-colors duration-200 transform hover:text-blue-500 md:mx-4 md:my-0">Blood Request</a></Link>
-                       
+
                         <Link href="profile">
                             <a className="my-1 text-sm font-medium text-gray-700 transition-colors duration-200 transform hover:text-blue-500 md:mx-4 md:my-0">Profile</a></Link>
                         <Link href="/register">

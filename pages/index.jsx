@@ -10,16 +10,22 @@ const Home = ({ allPosts }) => {
   const [modal, setModal] = useState(false);
   const [post, setPost] = useState('');
   const [allPost, setAllPost] = useState(true);
+  const router = useRouter()
   let myId = Cookies.get('myId')
 
   console.log(allPost)
   const [me, setMe] = useState({});
-  console.log(myId)
   useEffect(() => {
+
     async function load() {
-      const response = await fetch(`https://lamb-backend.herokuapp.com/backend/get-user/${myId}`);
-      const data = await response.json();
-      setMe(data);
+      if (!myId) {
+        router.push('/register');
+      }
+      else {
+        const response = await fetch(`https://lamb-backend.herokuapp.com/backend/get-user/${myId}`);
+        const data = await response.json();
+        setMe(data);
+      }
     }
     load();
   }, [myId])
@@ -39,15 +45,8 @@ const Home = ({ allPosts }) => {
     setPost('')
     setModal(false);
   }
-  const router = useRouter()
 
-  // if (process.browser) {
-  //   //Runs only on client side
-  //   if (!myId) {
-  //     router.push('/register');
 
-  //   }
-  // }
   return (
     <div>
       <div className="flex justify-center items-center gap-8 my-2">
