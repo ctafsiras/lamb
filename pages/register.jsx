@@ -14,7 +14,7 @@ export default function register() {
     const [password, setPassword] = useState('');
     const [phone, setPhone] = useState('');
     const [area, setArea] = useState('');
-    const [role, setRole] = useState('visitor');
+    const [role, setRole] = useState('ROLE_VISITOR');
     const [dob, setDob] = useState('');
 
     const [eligibility, setEligibility] = useState('');
@@ -25,7 +25,7 @@ export default function register() {
         e.preventDefault();
         const user = { username, email, password, phone, area, dob, role, eligibility, last_donate, blood_type }
         setLoading(true);
-        const res = await fetch('https://lamb-backend.herokuapp.com//backend/save-user', {
+        const res = await fetch('https://lamb-backend.herokuapp.com/backend/save-user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -33,9 +33,10 @@ export default function register() {
             body: JSON.stringify(user),
         })
         const data = await res.json();
-        if (data > 0) {
+        console.log(data);
+        if (data.token) {
             setLoading(false);
-            Cookies.set('myId', data, { expires: 365 })
+            Cookies.set('token', data.token, { expires: 15 })
             router.push('/')
         }
     }
@@ -50,14 +51,14 @@ export default function register() {
                         <span className='ml-2 mb-1 text-xs'>Enter Your Email:</span>
                         <div className="relative">
 
-                            <input onChange={(e) => setUsername(e.target.value)} className="appearance-none border pl-12 border-gray-100 shadow-sm focus:shadow-md focus:placeholder-gray-600  transition  rounded-md w-full py-3 text-gray-600 leading-tight focus:outline-none focus:ring-gray-600 focus:shadow-outline" id="username" type="text" placeholder="Name" />
+                            <input required onChange={(e) => setUsername(e.target.value)} className="appearance-none border pl-12 border-gray-100 shadow-sm focus:shadow-md focus:placeholder-gray-600  transition  rounded-md w-full py-3 text-gray-600 leading-tight focus:outline-none focus:ring-gray-600 focus:shadow-outline" id="username" type="text" placeholder="Name" />
                             <div className="absolute left-4 inset-y-0 flex items-center">
                                 <HiUser />
                             </div>
                         </div>
                         <span className='ml-2 mt-3 text-xs'>Enter Your Email:</span>
                         <div className="relative mt-1">
-                            <input onChange={(e) => setEmail(e.target.value)} className="appearance-none border pl-12 border-gray-100 shadow-sm focus:shadow-md focus:placeholder-gray-600  transition  rounded-md w-full py-3 text-gray-600 leading-tight focus:outline-none focus:ring-gray-600 focus:shadow-outline" id="email" type="email" placeholder="Email" />
+                            <input required onChange={(e) => setEmail(e.target.value)} className="appearance-none border pl-12 border-gray-100 shadow-sm focus:shadow-md focus:placeholder-gray-600  transition  rounded-md w-full py-3 text-gray-600 leading-tight focus:outline-none focus:ring-gray-600 focus:shadow-outline" id="email" type="email" placeholder="Email" />
                             <div className="absolute left-4 inset-y-0 flex items-center">
                                 <HiOutlineMail />
                             </div>
@@ -85,19 +86,19 @@ export default function register() {
                         </div>
                         <span className='ml-2 mt-3 text-xs'>Enter Your Date Of Birth:</span>
                         <div className="relative mt-1">
-                            <input onChange={(e) => setDob(e.target.value)} className="appearance-none border pl-12 border-gray-100 shadow-sm focus:shadow-md focus:placeholder-gray-600  transition  rounded-md w-full py-3 text-gray-600 leading-tight focus:outline-none focus:ring-gray-600 focus:shadow-outline" id="bateofbirth" type="date" placeholder="Date of Birth" />
+                            <input required onChange={(e) => setDob(e.target.value)} className="appearance-none border pl-12 border-gray-100 shadow-sm focus:shadow-md focus:placeholder-gray-600  transition  rounded-md w-full py-3 text-gray-600 leading-tight focus:outline-none focus:ring-gray-600 focus:shadow-outline" id="bateofbirth" type="date" placeholder="Date of Birth" />
                             <div className="absolute left-4 inset-y-0 flex items-center">
                                 <HiCalendar />
                             </div>
                         </div>
 
                         <div className="mt-4 flex items-center text-gray-500">
-                            <input onChange={(e) => setRole(e.target.checked ? "donor" : 'visitor')} type="checkbox" id="role" className="mr-2" />
+                            <input onChange={(e) => setRole(e.target.checked ? "ROLE_DONOR" : 'ROLE_VISITOR')} type="checkbox" id="role" className="mr-2" />
                             <p className="text-sm" htmlFor="role">
                                 As a Donor?
                             </p>
                         </div>
-                        <div className={role === 'visitor' && 'hidden'}>
+                        <div className={role === 'ROLE_VISITOR' && 'hidden'}>
                             <span className='ml-2 mt-3 text-xs'>Enter Your Eligibility:</span>
                             <div className="relative mt-1">
                                 <input onChange={(e) => setEligibility(e.target.value)} className="appearance-none border pl-12 border-gray-100 shadow-sm focus:shadow-md focus:placeholder-gray-600  transition  rounded-md w-full py-3 text-gray-600 leading-tight focus:outline-none focus:ring-gray-600 focus:shadow-outline" id="eligibility" type="text" placeholder="Yes or No" />

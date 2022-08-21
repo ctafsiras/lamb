@@ -1,18 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Cookies from 'js-cookie';
 
-export default function FeedCard({ post, myId }) {
-    const [user, setUser] = useState({});
-    useEffect(() => {
-        async function load() {
-            const response = await fetch(`https://lamb-backend.herokuapp.com/backend/get-user/${post.userFK}`);
-            const data = await response.json();
-            setUser(data);
-        }
-        load();
-    }, [post])
-    const handleDelete = async () => {
+export default function FeedCard({ post, me, myPost }) {
 
+    const handleDelete = async () => {
         const yes = confirm('Are You 100% sure to Delete it?')
         if (yes) {
             const res = await fetch(`https://lamb-backend.herokuapp.com/backend/delete-post/${post.postId}`, {
@@ -23,7 +14,6 @@ export default function FeedCard({ post, myId }) {
             })
             const data = await res.json();
         }
-
     }
     const handleSolveUpdate = async () => {
         const newPost = post;
@@ -47,7 +37,7 @@ export default function FeedCard({ post, myId }) {
             <a className="inline-flex items-center">
                 <img alt="blog" src="https://dummyimage.com/103x103" className="w-12 h-12 rounded-full flex-shrink-0 object-cover object-center" />
                 <span className="flex-grow flex flex-col pl-4">
-                    <span className="title-font font-medium text-gray-900">{user?.username}</span>
+                    <span className="title-font font-medium text-gray-900">{me?.username}</span>
                     <span className="text-gray-400 text-xs tracking-widest mt-0.5 border p-1">{post.lastStatus}</span>
                 </span>
             </a>
@@ -62,7 +52,7 @@ export default function FeedCard({ post, myId }) {
                 <span className="text-gray-400 mr-3 inline-flex items-center ml-auto leading-none text-sm pr-3 py-1 border-r-2 border-gray-200">
                     Poseted: 10 Sep 2022
                 </span>
-                {post.userFK === parseInt(myId) ?
+                {myPost ?
                     <div className='flex items-center'>
                         <label htmlFor="default-toggle" class="inline-flex relative items-center cursor-pointer mr-4">
                             <input onChange={handleSolveUpdate} type="checkbox" checked={post.lastStatus === "SOLVED" && true} id="default-toggle" class="sr-only peer" />
@@ -72,7 +62,7 @@ export default function FeedCard({ post, myId }) {
                         <button onClick={handleDelete} className='bg-red-800 text-white py-1 rounded-md px-2'>Delete</button>
                     </div>
                     :
-                    <a href={`tel:+88${user?.phone}`} className="text-white bg-green-700 rounded-lg hover:bg-green-800 px-3 py-2 inline-flex items-center leading-none text-md">
+                    <a href={`tel:+88${me?.phone}`} className="text-white bg-green-700 rounded-lg hover:bg-green-800 px-3 py-2 inline-flex items-center leading-none text-md">
                         Connect Now
                     </a>}
             </div>

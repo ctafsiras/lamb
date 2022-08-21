@@ -3,38 +3,30 @@ import { useEffect, useState } from "react";
 import FeedCard from "../components/FeedCard";
 import Cookies from 'js-cookie';
 import { useRouter } from "next/router";
-import { redirect } from "next/dist/server/api-utils";
 import toast from "react-hot-toast";
 
-const Home = ({ allPosts }) => {
+const Home = ({ allPosts, me, myPosts }) => {
   const [modal, setModal] = useState(false);
   const [post, setPost] = useState('');
   const [allPost, setAllPost] = useState(true);
   const router = useRouter()
-  let myId = Cookies.get('myId')
-
-  const [me, setMe] = useState({});
+  let token = Cookies.get('token')
   useEffect(() => {
-
-    async function load() {
-      if (!myId) {
-        router.push('/register');
-      }
-      else {
-        const response = await fetch(`https://lamb-backend.herokuapp.com/backend/get-user/${myId}`);
-        const data = await response.json();
-        setMe(data);
-      }
+    if (!token) {
+      router.push('/login');
     }
-    load();
-  }, [myId])
+  }, [])
   const handleCreate = async () => {
-    const newPost = { postDetails: post, lastStatus: "UNSOLVED", userFK: myId }
+    const newPost = { postDetails: post, lastStatus: "UNSOLVED" }
     const res = await fetch('https://lamb-backend.herokuapp.com/backend/create-post', {
-      method: 'POST',
+
       headers: {
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
+      mode: 'no-cors',
+      method: 'POST',
       body: JSON.stringify(newPost),
     })
     const data = await res.json();
@@ -62,11 +54,11 @@ const Home = ({ allPosts }) => {
           <div className="flex flex-wrap -m-12">
             {allPost ?
               allPosts.map((post, i) => (
-                <FeedCard myId={myId} post={post} key={i} />
+                <FeedCard me={me} myPost={false} post={post} key={i} />
               ))
               :
-              allPosts.map((post, i) => (
-                post.userFK === parseInt(myId) && <FeedCard myId={myId} post={post} key={i} />
+              myPosts.map((post, i) => (
+                <FeedCard me={me} myPost={true} post={post} key={i} />
               ))
             }
           </div>
@@ -99,10 +91,32 @@ const Home = ({ allPosts }) => {
     </div>
   );
 };
-export async function getServerSideProps() {
-  const data = await (await fetch("https://lamb-backend.herokuapp.com/backend/get-all-post")).json();
+export async function getServerSideProps(context) {
+  const token = context.req.cookies.token;
+  const posts = await (await fetch("https://lamb-backend.herokuapp.com/backend/get-all-post", {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })).json();
+  const myPosts = await (await fetch("https://lamb-backend.herokuapp.com/backend/get-all-post-user", {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })).json();
+  const me = await (await fetch("https://lamb-backend.herokuapp.com/backend/get-user", {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  })).json();
+  console.log('me', me, 'myPost', myPosts, 'all', posts);
   return {
-    props: { allPosts: data },
+    props: { allPosts: posts, me, myPosts },
   };
 
 }

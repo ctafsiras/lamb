@@ -1,8 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import { FaBeer, FaPhone } from 'react-icons/fa';
-import { BiDonateBlood } from 'react-icons/bi';
-import { HiOutlineMail, HiLockClosed, HiUser, HiLocationMarker, HiCalendar } from 'react-icons/hi';
+import { HiOutlineMail, HiLockClosed } from 'react-icons/hi';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 
@@ -10,16 +8,12 @@ export default function Login() {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    const [eligibility, setEligibility] = useState('');
-    const [last_donate, setLastDonate] = useState('');
-    const [blood_type, setBloodType] = useState('');
     const [loading, setLoading] = useState(false);
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const user = { email, password }
+        const user = { login: email, password }
         setLoading(true);
-        const res = await fetch('https://lamb-backend.herokuapp.com//backend/save-user', {
+        const res = await fetch('https://lamb-backend.herokuapp.com/backend/login-user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -27,9 +21,9 @@ export default function Login() {
             body: JSON.stringify(user),
         })
         const data = await res.json();
-        if (data > 0) {
+        if (data.token) {
             setLoading(false);
-            Cookies.set('myId', data, { expires: 365 })
+            Cookies.set('token', data.token, { expires: 15 })
             router.push('/')
         }
     }

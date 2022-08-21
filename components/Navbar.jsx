@@ -6,7 +6,7 @@ export default function Navbar() {
     const router = useRouter()
     return (
 
-        <nav className={`bg-white shadow ${(router.pathname === '/register' || '/login') && 'hidden'}`}>
+        <nav className={`bg-white shadow ${['/register', '/login'].includes(router.pathname) && 'hidden'}`}>
             <div className="container px-6 py-4 mx-auto md:flex md:justify-between md:items-center">
                 <div className="flex items-center justify-between">
                     <div>

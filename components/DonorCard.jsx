@@ -2,37 +2,37 @@ import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 
-export default function DonorCard({ donor }) {
-    const [user, setUser] = useState({});
+export default function DonorCard({ donor, me }) {
     const [modal, setModal] = useState(false);
     const [donorBloodHistory, setDonorBloodHistory] = useState([]);
     const [reqSent, setReqSent] = useState(false)
+    let token = Cookies.get('token')
     useEffect(() => {
         async function loads() {
-            const response = await fetch(`https://lamb-backend.herokuapp.com/backend/get-donor-history/${donor.userFK}`);
+            const response = await fetch(`https://lamb-backend.herokuapp.com/backend/get-donor-history`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
             const data = await response.json();
             setDonorBloodHistory(data);
         }
         loads();
     }, [])
-    useEffect(() => {
-        async function load() {
-            const response = await fetch(`https://lamb-backend.herokuapp.com/backend/get-user/${donor.userFK}`);
-            const data = await response.json();
-            setUser(data);
-        }
-        load();
-    }, [])
+
     const handleRequest = async () => {
         const requestData = {
-            donorId: donor.donorId,
-            userId: Cookies.get('myId'),
+            donorId: donor.userFK,
+            requestId: me.userId,
             bloodType: donor.bloodType,
         }
-        const res = await fetch(`https://lamb-backend.herokuapp.com/backend/request-blood`, {
+        console.log(requestData)
+        const res = await fetch("https://lamb-backend.herokuapp.com/backend/request-blood", {
+            mode: 'no-cors',
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify(requestData)
         })
@@ -49,7 +49,7 @@ export default function DonorCard({ donor }) {
 
             <div class="p-4 border-t border-gray-200">
                 <div class="flex items-center justify-between">
-                    <h1 class="text-gray-600 font-medium">{user.username} (<span className='text-xl text-red-800'>{donor.bloodType}</span>)</h1>
+                    <h1 class="text-gray-600 font-medium">User fK {donor.userFK} (<span className='text-xl text-red-800'>{donor.bloodType}</span>)</h1>
                     <button
                         disabled={reqSent}
                         onClick={handleRequest}
@@ -70,12 +70,13 @@ export default function DonorCard({ donor }) {
                     <div className="relative bg-white rounded-lg shadow">
                         {/* <!-- Modal header --> */}
                         <div className="flex justify-between items-start p-4 rounded-t border-b ">
-                            <h3 className="text-xl font-semibold text-gray-900 ">{user.username}'s History</h3>
+                            <h3 className="text-xl font-semibold text-gray-900 ">{me.username}'s History</h3>
                             <button onClick={() => setModal(false)} type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center " data-modal-toggle="defaultModal">
                                 <svg aria-hidden="true" className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
                                 <span className="sr-only">Close modal</span>
                             </button>
                         </div>
+
                         {/* <!-- Modal body --> */}
                         <div className="p-6 space-y-6">
                             <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
