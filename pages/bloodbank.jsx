@@ -4,10 +4,17 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import DonorCard from '../components/DonorCard'
 import toast from "react-hot-toast";
+import { useRouter } from 'next/router';
 
 export default function bloodbank({ donors, me, visitorHistory }) {
     let token = Cookies.get('token')
     const [reqSent, setReqSent] = useState(false)
+    const router = useRouter();
+    useEffect(() => {
+        if (me.role === 'ROLE_DONOR') {
+            router.push('/');
+        }
+    }, [])
     const handleRequest = async (his) => {
         const requestData = {
             donorId: his.donorId,
@@ -40,25 +47,25 @@ export default function bloodbank({ donors, me, visitorHistory }) {
                     )
                 }
             </div>
-            <div class="overflow-x-auto relative shadow-md sm:rounded-lg max-w-2xl mb-36 mx-auto">
-                <table class="w-full text-sm text-left text-gray-500">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+            <div className="overflow-x-auto relative shadow-md sm:rounded-lg max-w-2xl mb-36 mx-auto">
+                <table className="w-full text-sm text-left text-gray-500">
+                    <thead className="text-xs text-gray-700 uppercase bg-gray-100">
                         <tr>
-                            <th scope="col" class="py-3 px-6">Date/Time</th>
-                            <th scope="col" class="py-3 px-6">Action</th>
-                            <th scope="col" class="py-3 px-6">Blood Group</th>
-                            <th scope="col" class="py-3 px-6">Request</th>
+                            <th scope="col" className="py-3 px-6">Date/Time</th>
+                            <th scope="col" className="py-3 px-6">Action</th>
+                            <th scope="col" className="py-3 px-6">Blood Group</th>
+                            <th scope="col" className="py-3 px-6">Request</th>
                         </tr>
                     </thead>
 
                     {
                         visitorHistory.map((his, i) => (
                             <tbody>
-                                <tr class="bg-white border-b">
-                                    <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">{his.time}</th>
-                                    <td class="py-4 px-6">{his.action}</td>
-                                    <td class="py-4 px-6">{his.bloodType}</td>
-                                    <td class="py-4 px-6"><span onClick={() => handleRequest(his)} className='bg-blue-700 px-2 py-1 text-white rounded-lg cursor-pointer'>Request Again</span></td>
+                                <tr className="bg-white border-b">
+                                    <th scope="row" className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">{his.time}</th>
+                                    <td className="py-4 px-6">{his.action}</td>
+                                    <td className="py-4 px-6">{his.bloodType}</td>
+                                    <td className="py-4 px-6"><span onClick={() => handleRequest(his)} className='bg-blue-700 px-2 py-1 text-white rounded-lg cursor-pointer'>Request Again</span></td>
                                 </tr>
                             </tbody>
                         ))

@@ -41,24 +41,24 @@ export default function DonorCard({ donor, me }) {
         toast.success('Successfully Requested!')
     }
     return (
-        <div class="w-80 bg-white shadow rounded border border-transparent hover:border-blue-500 mx-auto">
-            <div class="h-48 w-full checker-bg flex items-center justify-center p-4 text-blue-500">
-                <div class="w-32 h-32 bg-gray-100 rounded-full bg-cover bg-center bg-[url('https://png.pngitem.com/pimgs/s/35-350426_profile-icon-png-default-profile-picture-png-transparent.png')]">
+        <div className="w-80 bg-white shadow rounded border border-transparent hover:border-blue-500 mx-auto">
+            <div className="h-48 w-full checker-bg flex items-center justify-center p-4 text-blue-500">
+                <div className="w-32 h-32 bg-gray-100 rounded-full bg-cover bg-center bg-[url('https://png.pngitem.com/pimgs/s/35-350426_profile-icon-png-default-profile-picture-png-transparent.png')]">
                 </div>
             </div>
 
-            <div class="p-4 border-t border-gray-200">
-                <div class="flex items-center justify-between">
-                    <h1 class="text-gray-600 font-medium">User fK {donor.userFK} (<span className='text-xl text-red-800'>{donor.bloodType}</span>)</h1>
+            <div className="p-4 border-t border-gray-200">
+                <div className="flex items-center justify-between">
+                    <h1 className="text-gray-600 font-medium">User fK {donor.userFK} (<span className='text-xl text-red-800'>{donor.bloodType}</span>)</h1>
                     <button
                         disabled={reqSent}
                         onClick={handleRequest}
-                        class="text-white px-2 py-1 disabled:bg-blue-400 rounded-xl bg-blue-700">Request</button>
+                        className="text-white px-2 py-1 disabled:bg-blue-400 rounded-xl bg-blue-700">Request</button>
                 </div>
                 <div className='flex justify-between mt-2 gap-3'>
-                    <p class="text-black text-md my-1">Eligibility: <span className='font-bold '>{donor.eligibility}</span></p>
+                    <p className="text-black text-md my-1">Eligibility: <span className='font-bold '>{donor.eligibility}</span></p>
 
-                    <button onClick={() => setModal(true)} class="text-white px-2 py-1 rounded-xl bg-blue-700">
+                    <button onClick={() => setModal(true)} className="text-white px-2 py-1 rounded-xl bg-blue-700">
                         History
                     </button>
                 </div>
@@ -79,22 +79,22 @@ export default function DonorCard({ donor, me }) {
 
                         {/* <!-- Modal body --> */}
                         <div className="p-6 space-y-6">
-                            <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
-                                <table class="w-full text-sm text-left text-gray-500">
-                                    <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                            <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
+                                <table className="w-full text-sm text-left text-gray-500">
+                                    <thead className="text-xs text-gray-700 uppercase bg-gray-100">
                                         <tr>
-                                            <th scope="col" class="py-3 px-6">Date/Time</th>
-                                            <th scope="col" class="py-3 px-6">Action</th>
-                                            <th scope="col" class="py-3 px-6">Blood Group</th>
+                                            <th scope="col" className="py-3 px-6">Date/Time</th>
+                                            <th scope="col" className="py-3 px-6">Action</th>
+                                            <th scope="col" className="py-3 px-6">Blood Group</th>
                                         </tr>
                                     </thead>
                                     {
                                         donorBloodHistory.map((history, index) => (
                                             <tbody key={index}>
-                                                <tr class="bg-white border-b">
-                                                    <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">{history.time}</th>
-                                                    <td class="py-4 px-6">{history.action}</td>
-                                                    <td class="py-4 px-6">{history.bloodType}</td>
+                                                <tr className="bg-white border-b">
+                                                    <th scope="row" className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">{history.time}</th>
+                                                    <td className="py-4 px-6">{history.action}</td>
+                                                    <td className="py-4 px-6">{history.bloodType}</td>
                                                 </tr>
                                             </tbody>
                                         ))
