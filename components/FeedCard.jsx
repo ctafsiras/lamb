@@ -1,7 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import Cookies from 'js-cookie';
+import axios from 'axios';
 
 export default function FeedCard({ post, me, myPost }) {
+    let token = Cookies.get('token')
+    const [user, setUser] = useState({});
+    useEffect(() => {
+
+        axios.get(`https://lamb-backend.herokuapp.com/backend/get-user/${post.userFK}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then((res) => {
+                setUser(res.data)
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+
+
+    }, []);
+
 
     const handleDelete = async () => {
         const yes = confirm('Are You 100% sure to Delete it?')
@@ -37,7 +57,7 @@ export default function FeedCard({ post, me, myPost }) {
             <a className="inline-flex items-center">
                 <img alt="blog" src="https://dummyimage.com/103x103" className="w-12 h-12 rounded-full flex-shrink-0 object-cover object-center" />
                 <span className="flex-grow flex flex-col pl-4">
-                    <span className="title-font font-medium text-gray-900">{me?.username}</span>
+                    <span className="title-font font-medium text-gray-900">{user?.username}</span>
                     <span className="text-gray-400 text-xs tracking-widest mt-0.5 border p-1">{post.lastStatus}</span>
                 </span>
             </a>
@@ -62,7 +82,7 @@ export default function FeedCard({ post, me, myPost }) {
                         <button onClick={handleDelete} className='bg-red-800 text-white py-1 rounded-md px-2'>Delete</button>
                     </div>
                     :
-                    <a href={`tel:+88${me?.phone}`} className="text-white bg-green-700 rounded-lg hover:bg-green-800 px-3 py-2 inline-flex items-center leading-none text-md">
+                    <a href={`tel:+88${user?.phone}`} className="text-white bg-green-700 rounded-lg hover:bg-green-800 px-3 py-2 inline-flex items-center leading-none text-md">
                         Connect Now
                     </a>}
             </div>
