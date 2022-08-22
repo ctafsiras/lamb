@@ -1,9 +1,13 @@
 import React from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-
+import Cookies from 'js-cookie';
 export default function Navbar() {
     const router = useRouter()
+    const handleLogout = () => {
+        Cookies.remove('token')
+        router.push('/login');
+    }
     return (
 
         <nav className={`bg-white shadow ${['/register', '/login'].includes(router.pathname) && 'hidden'}`}>
@@ -35,7 +39,8 @@ export default function Navbar() {
 
                         <Link href="profile">
                             <a className="my-1 text-sm font-medium text-gray-700 transition-colors duration-200 transform hover:text-blue-500 md:mx-4 md:my-0">Profile</a></Link>
-                       
+                        <button className='bg-blue-700 text-white px-2 py-1 rounded-lg' onClick={handleLogout}>Logout</button>
+
                     </div>
                 </div>
             </div>
